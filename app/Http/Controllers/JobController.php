@@ -62,14 +62,12 @@ class JobController extends Controller
 
     public function edit(Job $job) {
 
-     Gate::authorize('edit-job', $job);
-
       return view('jobs.edit', compact('job'));
     }
 
-    public function delete(Job $job) {
+    public function destroy(Job $job) {
 
-        Gate::authorize('edit-job', $job);
+        Gate::authorize('edit', $job);
 
          $job->delete();
 
