@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\JobPosted;
 
 class JobController extends Controller
 {
@@ -50,12 +52,14 @@ class JobController extends Controller
         'salary' => ['required', 'numeric', 'min:0']
     ]);
 
-
-    Job::create([
+       $job = Job::create([
         'title' => request('title'),
         'salary' => request('salary'),
         'employer_id' => 1
     ]);
+
+      Mail::to($job->employer->user)
+       ->queue(new JobPosted($job));
 
     return redirect('/jobs');
     }
